@@ -4,9 +4,10 @@ import (
 	"net/http"
 	"errors"
 	"fmt"
+	"log"
 )
 
-func (app *Config) Authenticate (w http.ResponseWriter, r *http.Request) {
+func (app *Config) Authenticate(w http.ResponseWriter, r *http.Request) {
 	var requestPayload struct{
 		Email string `json:"email"`
 		Password string `json:"password"`
@@ -14,6 +15,7 @@ func (app *Config) Authenticate (w http.ResponseWriter, r *http.Request) {
 
 	err := app.readJSON(w, r, &requestPayload)
 
+	log.Println("Auth-Service Error1:", err)
 	if err != nil {
 		app.errorJSON(w, err, http.StatusBadRequest)
 		return
@@ -21,12 +23,15 @@ func (app *Config) Authenticate (w http.ResponseWriter, r *http.Request) {
 
 	// valuidate the user agauinst the database
 	user, err := app.Models.User.GetByEmail(requestPayload.Email)
+
+	log.Println("Auth-Service Error2:", err)
 	if err != nil {
 		app.errorJSON(w, errors.New("invalid creds"), http.StatusBadRequest)
 		return
 	}
 
 	valid, err := user.PasswordMatches(requestPayload.Password)
+	log.Println("Auth-Service Error3:", err)
 	if err != nil || !valid {
 		app.errorJSON(w, errors.New("invalid creds"), http.StatusBadRequest)
 		return

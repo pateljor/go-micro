@@ -32,6 +32,7 @@ func (app *Config) HandleSubmission(w http.ResponseWriter, r *http.Request) {
 	var requestPayload RequestPayload
 
 	err := app.readJSON(w, r, &requestPayload)
+	log.Println("Broker Handle Error1:", err)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -52,6 +53,7 @@ func (app *Config) authenticate(w http.ResponseWriter, a AuthPayload){
 
 	// call the service
 	request, err := http.NewRequest("POST", "http://authentication-service/authenticate", bytes.NewBuffer(jsonData))
+	log.Println("Broker Handle Error2:", err)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -59,6 +61,7 @@ func (app *Config) authenticate(w http.ResponseWriter, a AuthPayload){
 
 	client := &http.Client{}
 	response, err := client.Do(request)
+	log.Println("Broker Handle Error3:", err)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -66,7 +69,7 @@ func (app *Config) authenticate(w http.ResponseWriter, a AuthPayload){
 	defer response.Body.Close()
 
 
-	log.Println("Error:", err)
+	log.Println("Broker Handle Error4:", err)
 	// make sure we get the correct status code 
 	if response.StatusCode == http.StatusUnauthorized {
 		app.errorJSON(w, errors.New("invalid creds"))
