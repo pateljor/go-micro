@@ -54,6 +54,7 @@ func (app *Config) authenticate(w http.ResponseWriter, a AuthPayload){
 	request, err := http.NewRequest("POST", "http://authentication-service/authenticate", bytes.NewBuffer(jsonData))
 	if err != nil {
 		app.errorJSON(w, err)
+		log.Println("Errror creating request", err)
 		return
 	}
 
@@ -61,6 +62,7 @@ func (app *Config) authenticate(w http.ResponseWriter, a AuthPayload){
 	response, err := client.Do(request)
 	if err != nil {
 		app.errorJSON(w, err)
+		log.Println("Errror getting resposne", err)
 		return
 	}
 	defer response.Body.Close()
@@ -69,9 +71,11 @@ func (app *Config) authenticate(w http.ResponseWriter, a AuthPayload){
 	log.Println("Error:", err)
 	// make sure we get the correct status code 
 	if response.StatusCode == http.StatusUnauthorized {
+		log.Println("Wrong Status Code", response.StatusCode)
 		app.errorJSON(w, errors.New("invalid creds"))
 		return
 	} else if response.StatusCode != http.StatusAccepted {
+		log.Println("Wrong Status Code 2", response.StatusCode)
 		app.errorJSON(w, errors.New("error calling auth service"))
 		return
 	}
@@ -83,11 +87,13 @@ func (app *Config) authenticate(w http.ResponseWriter, a AuthPayload){
 
 	err = json.NewDecoder(response.Body).Decode(&jsonFromService)
 	if err != nil {
+		log.Println("Error creating decoder", err)
 		app.errorJSON(w, err)
 		return
 	}
 
 	if jsonFromService.Error{
+		log.Println("Error from jsonFromService", )
 		app.errorJSON(w, err, http.StatusUnauthorized)
 		return
 	}
