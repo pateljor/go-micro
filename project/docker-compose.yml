@@ -12,6 +12,15 @@ services:
     deploy:
       mode: replicated
       replicas: 1
+  
+  logger-service:
+    build:
+      context: ./../logger-service
+      dockerfile: ./../logger-service/logger-service.dockerfile
+    restart: always
+    deploy:
+      mode: replicated
+      replicas: 1
       
   authentication-service:
     build:
@@ -41,3 +50,14 @@ services:
     volumes:
       - ./db-data/postgres/:/var/lib/postgresql/data/
     command: -p 5433 # switches port from default 5432 to 5433, see postmaster.pid to confirm
+  
+  mongo:
+    image: 'mongo:4.2.16-bionic'
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: logs
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - ./db-data/mongo/:/data/db
