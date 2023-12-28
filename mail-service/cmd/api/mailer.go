@@ -3,37 +3,35 @@ package main
 import (
 	"bytes"
 	"html/template"
-	"time"
 	"log"
-	"fmt"
+	"time"
+
 	"github.com/vanng822/go-premailer/premailer"
 	mail "github.com/xhit/go-simple-mail/v2"
 )
 
-
-type Mail struct{
-	Domain string
-	Host string
-	Port int
-	Username string
-	Password string
-	Encryption string
+type Mail struct {
+	Domain      string
+	Host        string
+	Port        int
+	Username    string
+	Password    string
+	Encryption  string
 	FromAddress string
-	FromName string
+	FromName    string
 }
 
-type Message struct{
-	From string // email
-	FromName string // name of email
-	To string
-	Subject string
+type Message struct {
+	From        string
+	FromName    string
+	To          string
+	Subject     string
 	Attachments []string
-	Data any
-	DataMap map[string]any
+	Data        any
+	DataMap     map[string]any
 }
 
 func (m *Mail) SendSMTPMessage(msg Message) error {
-
 	if msg.From == "" {
 		msg.From = m.FromAddress
 	}
@@ -41,8 +39,8 @@ func (m *Mail) SendSMTPMessage(msg Message) error {
 	if msg.FromName == "" {
 		msg.FromName = m.FromName
 	}
-	
-	data := map[string]any{
+
+	data := map[string]any {
 		"message": msg.Data,
 	}
 
@@ -50,13 +48,11 @@ func (m *Mail) SendSMTPMessage(msg Message) error {
 
 	formattedMessage, err := m.buildHTMLMessage(msg)
 	if err != nil {
-		log.Println(err)
 		return err
 	}
 
 	plainMessage, err := m.buildPlainTextMessage(msg)
 	if err != nil {
-		log.Println(err)
 		return err
 	}
 
@@ -80,7 +76,7 @@ func (m *Mail) SendSMTPMessage(msg Message) error {
 	email.SetFrom(msg.From).
 		AddTo(msg.To).
 		SetSubject(msg.Subject)
-	
+
 	email.SetBody(mail.TextPlain, plainMessage)
 	email.AddAlternative(mail.TextHTML, formattedMessage)
 
@@ -89,17 +85,18 @@ func (m *Mail) SendSMTPMessage(msg Message) error {
 			email.AddAttachment(x)
 		}
 	}
-	
+
 	err = email.Send(smtpClient)
 	if err != nil {
+		log.Println(err)
 		return err
 	}
-
+	
 	return nil
 }
 
 func (m *Mail) buildHTMLMessage(msg Message) (string, error) {
-	templateToRender := ".mail-service/templates/mail.html.gohtml"
+	templateToRender := "./templates/mail.html.gohtml"
 
 	t, err := template.New("email-html").ParseFiles(templateToRender)
 	if err != nil {
@@ -121,7 +118,7 @@ func (m *Mail) buildHTMLMessage(msg Message) (string, error) {
 }
 
 func (m *Mail) buildPlainTextMessage(msg Message) (string, error) {
-	templateToRender := ".mail-service/templates/mail.plain.gohtml"
+	templateToRender := "./templates/mail.plain.gohtml"
 
 	t, err := template.New("email-plain").ParseFiles(templateToRender)
 	if err != nil {
