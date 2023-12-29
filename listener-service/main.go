@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	event "listener/events"
+	event "listener/event"
 	"log"
 	"math"
 	"os"
@@ -46,9 +46,9 @@ func connect() (*amqp.Connection, error) {
 
 	// dont continue until rabbit is readyw
 	for {
-		c, err := amqp.Dial("amqp://guest:guest@localhost")
+		c, err := amqp.Dial("amqp://guest:guest@rabbitmq")
 		if err != nil {
-			fmt.Println("RabbitMQ Not Ready...")
+			fmt.Println("RabbitMQ Not Ready Yet...")
 			counts++
 		} else{
 			log.Println("Connected to RabbitMQ!")
