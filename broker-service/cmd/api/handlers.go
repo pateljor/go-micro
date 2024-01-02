@@ -304,7 +304,7 @@ func (app *Config) LogViaGRPC(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var payload jsonResponse
-	payload.Error = true
+	payload.Error = false
 	payload.Message = "logged via grpc"
 	app.writeJSON(w, http.StatusAccepted, payload)
 
