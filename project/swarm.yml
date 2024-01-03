@@ -15,10 +15,12 @@ services:
        - caddy_config:/config
 
   front-end:
-    image: pateljor/frontend:1.0.1
+    image: pateljor/frontend:1.0.2
     deploy:
       mode: replicated
       replicas: 1
+    environment:
+      BROKER_URL: "http://backend"
 
   broker-service:
     image: pateljor/broker-service:1.0.1
