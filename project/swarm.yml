@@ -3,7 +3,7 @@ version: '3'
 services:
 
   caddy:
-    image: pateljor/micro-caddy:1.0.0
+    image: pateljor/micro-caddy:1.0.1
     deploy:
       mode: replicated
       replicas: 1
@@ -13,9 +13,9 @@ services:
     volumes:
        - caddy_data:/data
        - caddy_config:/config
-       
-  frontend:
-    image: pateljor/frontend:1.0.0
+
+  front-end:
+    image: pateljor/frontend:1.0.1
     deploy:
       mode: replicated
       replicas: 1
@@ -90,7 +90,6 @@ services:
     image: 'postgres:14.2'
     ports:
       - "5433:5433"
-    restart: always
     deploy:
       mode: replicated
       replicas: 1
