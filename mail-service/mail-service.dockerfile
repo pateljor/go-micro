@@ -1,5 +1,5 @@
 # build a tiny docker image
-FROM alpine:latest
+FROM --platform=linux/amd64 alpine:latest
 
 RUN mkdir /app
 
