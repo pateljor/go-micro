@@ -3,13 +3,13 @@ version: '3'
 services:
 
   caddy:
-    image: pateljor/micro-caddy-production:1.0.2
+    image: pateljor/micro-caddy-production:1.0.3
     deploy:
       mode: replicated
       replicas: 1
       placement:
         constraints:
-          - node.hostname == node-1-toronto
+          - node.hostname == node-1-yyz
     ports:
        - "80:80"
        - "443:443"
@@ -23,7 +23,7 @@ services:
       mode: replicated
       replicas: 1
     environment:
-      BROKER_URL: "http://broker.iamfeeling.ca"
+      BROKER_URL: "https://broker.iamfeeling.ca"
 
   broker-service:
     image: pateljor/broker-service:1.0.3
@@ -90,7 +90,7 @@ services:
       replicas: 1
       placement:
         constraints:
-          - node.hostname == node-1-toronto
+          - node.hostname == node-1-yyz
     environment:
       MONGO_INITDB_DATABASE: logs
       MONGO_INITDB_ROOT_USERNAME: admin
@@ -107,7 +107,7 @@ services:
       replicas: 1
       placement:
         constraints:
-          - node.hostname == node-1-toronto
+          - node.hostname == node-1-yyz
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
