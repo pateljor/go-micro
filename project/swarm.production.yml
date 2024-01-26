@@ -43,7 +43,7 @@ services:
       mode: replicated
       replicas: 1
     environment:
-      DSN: "host=postgres port=5432 user=postgres password=password dbname=users sslmode=disable timezone=UTC connect_timeout=5"
+      DSN: "host=postgres port=5432 user=postgres password=N1LIE691Gd4R1qdnQ1tX5YzWAJsaziAHg8dwx dbname=users sslmode=disable timezone=UTC connect_timeout=5"
     
   logger-service:
     image: pateljor/logger-service:1.0.3
@@ -110,7 +110,7 @@ services:
           - node.hostname == node-1-yyz
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
+      POSTGRES_PASSWORD: N1LIE691Gd4R1qdnQ1tX5YzWAJsaziAHg8dwx
       POSTGRES_DB: users
     volumes:
       - ./db-data/postgres/:/var/lib/postgresql/data/
@@ -121,5 +121,3 @@ volumes:
   caddy_data:
     external: true
   caddy_config:
-
-  # working yaml
